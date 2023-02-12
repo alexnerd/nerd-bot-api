@@ -44,7 +44,7 @@ public class Storage {
         storageImagePath = Path.of(imageDir);
     }
 
-    public byte[] getPhoto(String path) {
+    public byte[] getImage(String path) {
         try {
             return Files.readAllBytes(storageImagePath.resolve(path));
         } catch (IOException e) {

@@ -17,8 +17,8 @@
 package com.alexnerd.control.adapters;
 
 import com.alexnerd.control.Storage;
-import com.alexnerd.entity.RequestCollection;
-import com.alexnerd.entity.RequestType;
+import com.alexnerd.entity.MessageCollection;
+import com.alexnerd.entity.MessageType;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -27,33 +27,33 @@ import javax.json.bind.adapter.JsonbAdapter;
 import javax.naming.OperationNotSupportedException;
 
 @ApplicationScoped
-public class RqJsonAdapter implements JsonbAdapter<RequestCollection, JsonObject> {
+public class MsgJsonAdapter implements JsonbAdapter<MessageCollection, JsonObject> {
 
     @Inject
     Storage storage;
 
     @Override
-    public JsonObject adaptToJson(RequestCollection rq) throws Exception {
-        throw new OperationNotSupportedException("Converting operation from BaseRq to Json not supported");
+    public JsonObject adaptToJson(MessageCollection msg) throws Exception {
+        throw new OperationNotSupportedException("Converting operation from MessageCollection to Json not supported");
     }
 
     @Override
-    public RequestCollection adaptFromJson(JsonObject jsonObject) {
+    public MessageCollection adaptFromJson(JsonObject jsonObject) {
         String type = jsonObject.getString("type");
-        return switch (RequestType.valueOf(type)) {
+        return switch (MessageType.valueOf(type)) {
             case TEXT -> {
                 JsonObject message = jsonObject.getJsonObject("message");
                 String text = message.getString("text");
-                yield new RequestCollection.TextRq(text);
+                yield new MessageCollection.TextMsg(text);
             }
             case IMAGE_WITH_CAPTION -> {
                 JsonObject message = jsonObject.getJsonObject("message");
                 String text = message.getString("text");
                 String imgSource = message.getString("img_source");
-                byte[] photo = storage.getPhoto(imgSource);
-                yield new RequestCollection.PhotoWithCaptionRq(photo, text);
+                byte[] photo = storage.getImage(imgSource);
+                yield new MessageCollection.PhotoWithCaptionMsg(photo, text);
             }
-            default -> throw new IllegalStateException("Unsupported request type: " + RequestType.valueOf(type));
+            default -> throw new IllegalStateException("Unsupported message type: " + MessageType.valueOf(type));
         };
     }
 }

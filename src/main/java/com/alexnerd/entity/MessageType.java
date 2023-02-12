@@ -16,26 +16,6 @@
 
 package com.alexnerd.entity;
 
-import com.alexnerd.control.TelegramBot;
-import org.jboss.resteasy.reactive.RestForm;
-
-import javax.ws.rs.core.Response;
-
-public interface RequestCollection {
-
-    Response send(TelegramBot bot);
-
-    record TextRq(String message) implements RequestCollection {
-        @Override
-        public Response send(TelegramBot bot) {
-            return bot.send(this);
-        }
-    }
-
-    record PhotoWithCaptionRq(@RestForm byte[] photo, @RestForm String caption) implements RequestCollection {
-        @Override
-        public Response send(TelegramBot bot) {
-            return bot.send(this);
-        }
-    }
+public enum MessageType {
+    TEXT, IMAGE_WITH_CAPTION
 }

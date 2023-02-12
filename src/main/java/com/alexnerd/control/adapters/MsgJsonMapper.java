@@ -16,7 +16,7 @@
 
 package com.alexnerd.control.adapters;
 
-import com.alexnerd.entity.RequestCollection;
+import com.alexnerd.entity.MessageCollection;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
@@ -26,10 +26,10 @@ import javax.json.bind.JsonbBuilder;
 import javax.json.bind.JsonbConfig;
 
 @ApplicationScoped
-public class RqJsonMapper {
+public class MsgJsonMapper {
 
     @Inject
-    RqJsonAdapter adapter;
+    MsgJsonAdapter adapter;
 
     JsonbConfig config;
 
@@ -40,9 +40,9 @@ public class RqJsonMapper {
                 .withAdapters(adapter);
     }
 
-    public RequestCollection load(String stringified) {
+    public MessageCollection load(String stringified) {
         try (Jsonb jsonb = JsonbBuilder.create(config)) {
-            return jsonb.fromJson(stringified, RequestCollection.class);
+            return jsonb.fromJson(stringified, MessageCollection.class);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

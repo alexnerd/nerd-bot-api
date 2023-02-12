@@ -18,8 +18,8 @@ package com.alexnerd.boundary;
 
 import com.alexnerd.control.Storage;
 import com.alexnerd.control.TelegramBot;
-import com.alexnerd.control.adapters.RqJsonMapper;
-import com.alexnerd.entity.RequestCollection;
+import com.alexnerd.control.adapters.MsgJsonMapper;
+import com.alexnerd.entity.MessageCollection;
 import io.quarkus.scheduler.Scheduled;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -29,7 +29,7 @@ import javax.inject.Inject;
 public class JobScheduler {
 
     @Inject
-    RqJsonMapper mapper;
+    MsgJsonMapper mapper;
 
     @Inject
     TelegramBot bot;
@@ -40,7 +40,7 @@ public class JobScheduler {
     @Scheduled(every = "15s")
     protected void sendRandomMessage() {
         String randomFile = storage.getRandomFile();
-        RequestCollection rq = mapper.load(randomFile);
-        rq.send(bot);
+        MessageCollection msg = mapper.load(randomFile);
+        msg.execute(bot);
     }
 }

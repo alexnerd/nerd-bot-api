@@ -16,7 +16,7 @@
 
 package com.alexnerd.control;
 
-import com.alexnerd.entity.RequestCollection;
+import com.alexnerd.entity.MessageCollection;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
@@ -34,11 +34,11 @@ public class TelegramBot {
     @RestClient
     TelegramRestClient telegramClient;
 
-    public Response send(RequestCollection.TextRq rq) {
-        return telegramClient.sendMessage(chatId, rq.message());
+    public Response send(MessageCollection.TextMsg msg) {
+        return telegramClient.sendMessage(chatId, msg.message());
     }
 
-    public Response send(RequestCollection.PhotoWithCaptionRq rq) {
-        return telegramClient.sendPhoto(chatId, rq);
+    public Response send(MessageCollection.PhotoWithCaptionMsg msg) {
+        return telegramClient.sendPhoto(chatId, msg);
     }
 }

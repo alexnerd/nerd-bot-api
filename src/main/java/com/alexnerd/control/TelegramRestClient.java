@@ -16,7 +16,7 @@
 
 package com.alexnerd.control;
 
-import com.alexnerd.entity.RequestCollection;
+import com.alexnerd.entity.MessageCollection;
 import io.quarkus.rest.client.reactive.ClientExceptionMapper;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
@@ -38,7 +38,7 @@ public interface TelegramRestClient {
     @POST
     @Path("/sendPhoto")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
-    Response sendPhoto(@QueryParam("chat_id") String chatId, RequestCollection.PhotoWithCaptionRq rq);
+    Response sendPhoto(@QueryParam("chat_id") String chatId, MessageCollection.PhotoWithCaptionMsg msg);
 
 
     @ClientExceptionMapper

@@ -16,6 +16,24 @@
 
 package com.alexnerd.entity;
 
-public enum RequestType {
-    TEXT, IMAGE_WITH_CAPTION
+import com.alexnerd.control.TelegramBot;
+import org.jboss.resteasy.reactive.RestForm;
+
+public interface MessageCollection {
+
+    void execute(TelegramBot bot);
+
+    record TextMsg(String message) implements MessageCollection {
+        @Override
+        public void execute(TelegramBot bot) {
+            bot.send(this);
+        }
+    }
+
+    record PhotoWithCaptionMsg(@RestForm byte[] photo, @RestForm String caption) implements MessageCollection {
+        @Override
+        public void execute(TelegramBot bot) {
+            bot.send(this);
+        }
+    }
 }
