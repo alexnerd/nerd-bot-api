@@ -37,10 +37,17 @@ public class TelegramBot {
     public Response send(MessageCollection.TextMsg msg) {
         return telegramClient.sendMessage(chatId, msg.message());
     }
+
     public Response send(MessageCollection.PhotoWithCaptionMsg msg) {
         return telegramClient.sendPhoto(chatId, msg);
     }
+
     public Response send(MessageCollection.PollMsg msg) {
         return telegramClient.sendPoll(chatId, msg.question(), msg.isAnonymous(), msg.isMultiple(), msg.options());
+    }
+
+    public Response send(MessageCollection.QuizMsg msg) {
+        return telegramClient.sendQuiz(chatId, "quiz", msg.question(), msg.correctOption(), msg.isAnonymous(), msg.isMultiple(),
+                msg.options(), msg.explanation());
     }
 }

@@ -17,5 +17,5 @@
 package com.alexnerd.entity;
 
 public enum MessageType {
-    TEXT, IMAGE_WITH_CAPTION, POLL
+    TEXT, IMAGE_WITH_CAPTION, POLL, QUIZ
 }

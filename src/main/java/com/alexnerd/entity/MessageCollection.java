@@ -43,4 +43,12 @@ public interface MessageCollection {
             bot.send(this);
         }
     }
+
+    record QuizMsg(String question, int correctOption, boolean isAnonymous, boolean isMultiple,
+                   String options, String explanation) implements MessageCollection {
+        @Override
+        public void execute(TelegramBot bot) {
+            bot.send(this);
+        }
+    }
 }

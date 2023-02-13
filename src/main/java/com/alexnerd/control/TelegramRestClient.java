@@ -41,7 +41,7 @@ public interface TelegramRestClient {
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     Response sendPhoto(@QueryParam("chat_id") String chatId, MessageCollection.PhotoWithCaptionMsg msg);
 
-    @POST
+    @GET
     @Path("/sendPoll")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     Response sendPoll(@QueryParam("chat_id") String chatId,
@@ -49,6 +49,18 @@ public interface TelegramRestClient {
                       @QueryParam("is_anonymous") boolean isAnonymous,
                       @QueryParam("allows_multiple_answers") boolean isMultiple,
                       @QueryParam("options") String options);
+
+    @POST
+    @Path("/sendPoll")
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    Response sendQuiz(@QueryParam("chat_id") String chatId,
+                      @QueryParam("type") String type,
+                      @QueryParam("question") String question,
+                      @QueryParam("correct_option_id") int correctOption,
+                      @QueryParam("is_anonymous") boolean isAnonymous,
+                      @QueryParam("allows_multiple_answers") boolean isMultiple,
+                      @QueryParam("options") String options,
+                      @QueryParam("explanation") String explanation);
 
 
     @ClientExceptionMapper

@@ -67,6 +67,20 @@ public class MsgJsonAdapter implements JsonbAdapter<MessageCollection, JsonObjec
 
                 yield new MessageCollection.PollMsg(question, isAnonymous, isMultiple, "[" + options + "]");
             }
+            case QUIZ -> {
+                JsonObject message = jsonObject.getJsonObject("message");
+                String question = message.getString("question");
+                int correctOption = message.getInt("correct_option_id");
+                boolean  isAnonymous = message.getBoolean("is_anonymous");
+                boolean  isMultiple = message.getBoolean("allows_multiple_answers");
+                String explanation = message.getString("explanation");
+
+                JsonArray jsonArray = message.getJsonArray("options");
+                String options = jsonArray.stream().map(JsonValue::toString).collect(Collectors.joining(","));
+
+                yield new MessageCollection.QuizMsg(question, correctOption, isAnonymous, isMultiple,
+                        "[" + options + "]", explanation);
+            }
             default -> throw new IllegalStateException("Unsupported message type: " + MessageType.valueOf(type));
         };
     }
