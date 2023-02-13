@@ -22,9 +22,12 @@ import com.alexnerd.entity.MessageType;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.json.JsonArray;
 import javax.json.JsonObject;
+import javax.json.JsonValue;
 import javax.json.bind.adapter.JsonbAdapter;
 import javax.naming.OperationNotSupportedException;
+import java.util.stream.Collectors;
 
 @ApplicationScoped
 public class MsgJsonAdapter implements JsonbAdapter<MessageCollection, JsonObject> {
@@ -52,6 +55,17 @@ public class MsgJsonAdapter implements JsonbAdapter<MessageCollection, JsonObjec
                 String imgSource = message.getString("img_source");
                 byte[] photo = storage.getImage(imgSource);
                 yield new MessageCollection.PhotoWithCaptionMsg(photo, text);
+            }
+            case POLL -> {
+                JsonObject message = jsonObject.getJsonObject("message");
+                String question = message.getString("question");
+                boolean  isAnonymous = message.getBoolean("is_anonymous");
+                boolean  isMultiple = message.getBoolean("allows_multiple_answers");
+
+                JsonArray jsonArray = message.getJsonArray("options");
+                String options = jsonArray.stream().map(JsonValue::toString).collect(Collectors.joining(","));
+
+                yield new MessageCollection.PollMsg(question, isAnonymous, isMultiple, "[" + options + "]");
             }
             default -> throw new IllegalStateException("Unsupported message type: " + MessageType.valueOf(type));
         };

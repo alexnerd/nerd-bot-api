@@ -33,12 +33,22 @@ public interface TelegramRestClient {
     @GET
     @Path("/sendMessage")
     @Consumes(MediaType.WILDCARD)
-    Response sendMessage(@QueryParam("chat_id") String chatId, @QueryParam("text") String message);
+    Response sendMessage(@QueryParam("chat_id") String chatId,
+                         @QueryParam("text") String message);
 
     @POST
     @Path("/sendPhoto")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     Response sendPhoto(@QueryParam("chat_id") String chatId, MessageCollection.PhotoWithCaptionMsg msg);
+
+    @POST
+    @Path("/sendPoll")
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    Response sendPoll(@QueryParam("chat_id") String chatId,
+                      @QueryParam("question") String question,
+                      @QueryParam("is_anonymous") boolean isAnonymous,
+                      @QueryParam("allows_multiple_answers") boolean isMultiple,
+                      @QueryParam("options") String options);
 
 
     @ClientExceptionMapper
