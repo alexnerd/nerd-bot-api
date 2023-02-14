@@ -24,7 +24,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Stream;
 
 @ApplicationScoped
 public class Storage {
@@ -53,11 +54,9 @@ public class Storage {
     }
 
     public String getRandomFile() {
-        try {
-            List<Path> paths = Files.list(storageContentPath).toList();
-
-            Random r = new Random();
-            Path path = paths.get(r.nextInt(paths.size()));
+        try (Stream<Path> pathStream = Files.list(storageContentPath)) {
+            List<Path> paths = pathStream.toList();
+            Path path = paths.get(ThreadLocalRandom.current().nextInt(paths.size()));
 
             return Files.readString(path);
         } catch (IOException e) {
