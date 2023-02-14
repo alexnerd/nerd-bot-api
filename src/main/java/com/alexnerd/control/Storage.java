@@ -36,8 +36,8 @@ public class Storage {
     @ConfigProperty(name = "storage.image.dir")
     String imageDir;
 
-    Path storageContentPath;
-    Path storageImagePath;
+    public Path storageContentPath;
+    public Path storageImagePath;
 
     @PostConstruct
     public void init() {
