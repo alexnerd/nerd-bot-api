@@ -37,7 +37,7 @@ public class LivenessCheck {
     public HealthCheck checkContentDirectoryExists() {
         return () -> HealthCheckResponse
                 .named("content-directory-exists")
-                .status(Files.exists(storage.storageContentPath))
+                .status(storage.isContentDirectoryExists())
                 .build();
     }
 
@@ -46,7 +46,7 @@ public class LivenessCheck {
     public HealthCheck checkImageDirectoryExists() {
         return () -> HealthCheckResponse
                 .named("image-directory-exists")
-                .status(Files.exists(storage.storageImagePath))
+                .status(storage.isImageDirectoryExists())
                 .build();
     }
 }

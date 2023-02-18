@@ -36,8 +36,8 @@ public class Storage {
     @ConfigProperty(name = "storage.image.dir")
     String imageDir;
 
-    public Path storageContentPath;
-    public Path storageImagePath;
+    private Path storageContentPath;
+    private Path storageImagePath;
 
     @PostConstruct
     public void init() {
@@ -62,5 +62,13 @@ public class Storage {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public boolean isContentDirectoryExists() {
+        return Files.exists(storageContentPath);
+    }
+
+    public boolean isImageDirectoryExists() {
+        return Files.exists(storageImagePath);
     }
 }
