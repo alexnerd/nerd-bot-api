@@ -47,7 +47,7 @@ public class TelegramBot {
     }
 
     public Response send(MessageCollection.QuizMsg msg) {
-        return telegramClient.sendQuiz(chatId, "quiz", msg.question(), msg.correctOption(), msg.isAnonymous(), msg.isMultiple(),
-                msg.options(), msg.explanation());
+        return telegramClient.sendQuiz(chatId, "quiz", msg.question(), msg.correctOption(), msg.isAnonymous(),
+                msg.isMultiple(), msg.options(), msg.explanation());
     }
 }
