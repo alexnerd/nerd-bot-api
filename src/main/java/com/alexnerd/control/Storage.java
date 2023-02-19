@@ -39,6 +39,8 @@ public class Storage {
     private Path storageContentPath;
     private Path storageImagePath;
 
+    private final static String FILE_EXTENSION = ".json";
+
     @PostConstruct
     public void init() {
         storageContentPath = Path.of(contentDir);
@@ -55,7 +57,10 @@ public class Storage {
 
     public String getRandomFile() {
         try (Stream<Path> pathStream = Files.list(storageContentPath)) {
-            List<Path> paths = pathStream.toList();
+            List<Path> paths = pathStream
+                    .filter(Files::isRegularFile)
+                    .filter(p -> p.getFileName().toString().endsWith(FILE_EXTENSION))
+                    .toList();
             Path path = paths.get(ThreadLocalRandom.current().nextInt(paths.size()));
 
             return Files.readString(path);
