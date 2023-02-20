@@ -17,17 +17,16 @@
 package com.alexnerd.control.adapters;
 
 import com.alexnerd.control.Storage;
+import com.alexnerd.control.factory.message.MessageFactory;
+import com.alexnerd.control.factory.message.MessageFactoryProvider;
 import com.alexnerd.entity.MessageCollection;
 import com.alexnerd.entity.MessageType;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.json.JsonArray;
 import javax.json.JsonObject;
-import javax.json.JsonValue;
 import javax.json.bind.adapter.JsonbAdapter;
 import javax.naming.OperationNotSupportedException;
-import java.util.stream.Collectors;
 
 @ApplicationScoped
 public class MsgJsonAdapter implements JsonbAdapter<MessageCollection, JsonObject> {
@@ -41,47 +40,12 @@ public class MsgJsonAdapter implements JsonbAdapter<MessageCollection, JsonObjec
     }
 
     @Override
-    public MessageCollection adaptFromJson(JsonObject jsonObject) {
-        String type = jsonObject.getString("type");
-        return switch (MessageType.valueOf(type)) {
-            case TEXT -> {
-                JsonObject message = jsonObject.getJsonObject("message");
-                String text = message.getString("text");
-                yield new MessageCollection.TextMsg(text);
-            }
-            case IMAGE_WITH_CAPTION -> {
-                JsonObject message = jsonObject.getJsonObject("message");
-                String text = message.getString("text");
-                String imgSource = message.getString("img_source");
-                byte[] photo = storage.getImage(imgSource);
-                yield new MessageCollection.PhotoWithCaptionMsg(photo, text);
-            }
-            case POLL -> {
-                JsonObject message = jsonObject.getJsonObject("message");
-                String question = message.getString("question");
-                boolean  isAnonymous = message.getBoolean("is_anonymous");
-                boolean  isMultiple = message.getBoolean("allows_multiple_answers");
+    public MessageCollection adaptFromJson(JsonObject json) {
+        String type = json.getString("type");
+        MessageType messageType = MessageType.valueOf(type);
+        MessageFactory factory = MessageFactoryProvider.getFactory(messageType);
 
-                JsonArray jsonArray = message.getJsonArray("options");
-                String options = jsonArray.stream().map(JsonValue::toString).collect(Collectors.joining(","));
-
-                yield new MessageCollection.PollMsg(question, isAnonymous, isMultiple, "[" + options + "]");
-            }
-            case QUIZ -> {
-                JsonObject message = jsonObject.getJsonObject("message");
-                String question = message.getString("question");
-                int correctOption = message.getInt("correct_option_id");
-                boolean  isAnonymous = message.getBoolean("is_anonymous");
-                boolean  isMultiple = message.getBoolean("allows_multiple_answers");
-                String explanation = message.getString("explanation");
-
-                JsonArray jsonArray = message.getJsonArray("options");
-                String options = jsonArray.stream().map(JsonValue::toString).collect(Collectors.joining(","));
-
-                yield new MessageCollection.QuizMsg(question, correctOption, isAnonymous, isMultiple,
-                        "[" + options + "]", explanation);
-            }
-            default -> throw new IllegalStateException("Unsupported message type: " + MessageType.valueOf(type));
-        };
+        JsonObject message = json.getJsonObject("message");
+        return factory.create(message, storage);
     }
 }
