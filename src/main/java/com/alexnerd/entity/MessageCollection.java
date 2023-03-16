@@ -19,7 +19,7 @@ package com.alexnerd.entity;
 import com.alexnerd.control.TelegramBot;
 import org.jboss.resteasy.reactive.RestForm;
 
-public interface MessageCollection extends Executable {
+sealed public interface MessageCollection extends Executable {
 
     record TextMsg(String message) implements MessageCollection {
         @Override
