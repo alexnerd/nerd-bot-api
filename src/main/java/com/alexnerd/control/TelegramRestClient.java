@@ -17,6 +17,7 @@
 package com.alexnerd.control;
 
 import com.alexnerd.entity.MessageCollection;
+import io.quarkus.logging.Log;
 import io.quarkus.rest.client.reactive.ClientExceptionMapper;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
@@ -66,6 +67,8 @@ public interface TelegramRestClient {
     @ClientExceptionMapper
     static RuntimeException toException(Response response) {
         JsonObject json = response.readEntity(JsonObject.class);
-        return new RuntimeException("Remote server responded not ok with error message: " + json.getString("description"));
+        String description = json.getString("description");
+        Log.error("Send message error, remote server response: " + response.getStatus() + " " + description);
+        return new RuntimeException("Send message error: " + description);
     }
 }

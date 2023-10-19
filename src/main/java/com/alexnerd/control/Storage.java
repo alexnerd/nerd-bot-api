@@ -16,6 +16,7 @@
 
 package com.alexnerd.control;
 
+import io.quarkus.logging.Log;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import javax.annotation.PostConstruct;
@@ -51,6 +52,7 @@ public class Storage {
         try {
             return Files.readAllBytes(storageImagePath.resolve(path));
         } catch (IOException e) {
+            Log.error("Read image file error, path: " + path, e);
             throw new RuntimeException(e);
         }
     }
@@ -65,6 +67,7 @@ public class Storage {
 
             return Files.readString(path);
         } catch (IOException e) {
+            Log.error("Read random json file error", e);
             throw new RuntimeException(e);
         }
     }

@@ -17,6 +17,7 @@
 package com.alexnerd.control.adapters;
 
 import com.alexnerd.entity.MessageCollection;
+import io.quarkus.logging.Log;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
@@ -44,6 +45,7 @@ public class MsgJsonMapper {
         try (Jsonb jsonb = JsonbBuilder.create(config)) {
             return jsonb.fromJson(stringified, MessageCollection.class);
         } catch (Exception e) {
+            Log.error("Error converting json to MessageCollection, json: " + stringified, e);
             throw new RuntimeException(e);
         }
     }
