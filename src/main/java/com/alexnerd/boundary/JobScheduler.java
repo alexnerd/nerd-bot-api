@@ -39,7 +39,7 @@ public class JobScheduler {
 
     @Scheduled(every = "15s")
     protected void sendRandomMessage() {
-        String randomFile = storage.getRandomFile();
+        String randomFile = storage.readRandomJsonFile();
         MessageCollection msg = mapper.load(randomFile);
         msg.execute(bot);
     }

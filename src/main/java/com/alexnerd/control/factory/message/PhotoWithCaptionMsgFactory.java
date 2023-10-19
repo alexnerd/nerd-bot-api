@@ -27,7 +27,7 @@ public class PhotoWithCaptionMsgFactory extends MessageFactory{
     public MessageCollection create(JsonObject json, Storage storage) {
         String text = json.getString("text");
         String imgSource = json.getString("img_source");
-        byte[] photo = storage.getImage(imgSource);
+        byte[] photo = storage.readImageFile(imgSource);
         return new MessageCollection.PhotoWithCaptionMsg(photo, text);
     }
 }

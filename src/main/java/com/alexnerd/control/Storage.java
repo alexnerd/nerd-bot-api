@@ -48,7 +48,7 @@ public class Storage {
         storageImagePath = Path.of(imageDir);
     }
 
-    public byte[] getImage(String path) {
+    public byte[] readImageFile(String path) {
         try {
             return Files.readAllBytes(storageImagePath.resolve(path));
         } catch (IOException e) {
@@ -57,7 +57,16 @@ public class Storage {
         }
     }
 
-    public String getRandomFile() {
+    private String readJsonFile(Path path) {
+        try {
+            return Files.readString(path);
+        } catch (IOException e) {
+            Log.error("Read json file error, path: " + path, e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    public String readRandomJsonFile() {
         try (Stream<Path> pathStream = Files.list(storageContentPath)) {
             List<Path> paths = pathStream
                     .filter(Files::isRegularFile)
@@ -65,7 +74,7 @@ public class Storage {
                     .toList();
             Path path = paths.get(ThreadLocalRandom.current().nextInt(paths.size()));
 
-            return Files.readString(path);
+            return readJsonFile(path);
         } catch (IOException e) {
             Log.error("Read random json file error", e);
             throw new RuntimeException(e);
