@@ -19,9 +19,9 @@ package com.alexnerd.control.factory.message;
 import com.alexnerd.control.Storage;
 import com.alexnerd.entity.MessageCollection;
 
-import javax.json.JsonArray;
-import javax.json.JsonObject;
-import javax.json.JsonValue;
+import jakarta.json.JsonArray;
+import jakarta.json.JsonObject;
+import jakarta.json.JsonValue;
 import java.util.stream.Collectors;
 
 public class PollMsgFactory extends MessageFactory{

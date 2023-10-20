@@ -22,10 +22,10 @@ import com.alexnerd.control.factory.message.MessageFactoryProvider;
 import com.alexnerd.entity.MessageCollection;
 import com.alexnerd.entity.MessageType;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-import javax.json.JsonObject;
-import javax.json.bind.adapter.JsonbAdapter;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.json.JsonObject;
+import jakarta.json.bind.adapter.JsonbAdapter;
 import javax.naming.OperationNotSupportedException;
 
 @ApplicationScoped

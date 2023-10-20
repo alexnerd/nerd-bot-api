@@ -17,14 +17,12 @@
 package com.alexnerd.checks;
 
 import com.alexnerd.control.Storage;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.inject.Produces;
+import jakarta.inject.Inject;
 import org.eclipse.microprofile.health.HealthCheck;
 import org.eclipse.microprofile.health.HealthCheckResponse;
 import org.eclipse.microprofile.health.Liveness;
-
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Produces;
-import javax.inject.Inject;
-import java.nio.file.Files;
 
 @ApplicationScoped
 public class LivenessCheck {

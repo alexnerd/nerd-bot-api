@@ -22,8 +22,8 @@ import com.alexnerd.control.adapters.MsgJsonMapper;
 import com.alexnerd.entity.MessageCollection;
 import io.quarkus.scheduler.Scheduled;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 
 @ApplicationScoped
 public class JobScheduler {

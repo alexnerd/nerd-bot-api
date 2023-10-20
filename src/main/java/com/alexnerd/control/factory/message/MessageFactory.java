@@ -19,7 +19,7 @@ package com.alexnerd.control.factory.message;
 import com.alexnerd.control.Storage;
 import com.alexnerd.entity.MessageCollection;
 
-import javax.json.JsonObject;
+import jakarta.json.JsonObject;
 
 public abstract class MessageFactory {
     public abstract MessageCollection create(JsonObject json, Storage storage);
