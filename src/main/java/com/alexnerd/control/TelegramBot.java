@@ -17,6 +17,7 @@
 package com.alexnerd.control;
 
 import com.alexnerd.entity.MessageCollection;
+import io.quarkus.logging.Log;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
@@ -35,18 +36,22 @@ public class TelegramBot {
     TelegramRestClient telegramClient;
 
     public Response send(MessageCollection.TextMsg msg) {
+        Log.debug("Send text message: " + msg.message());
         return telegramClient.sendMessage(chatId, msg.message());
     }
 
     public Response send(MessageCollection.PhotoWithCaptionMsg msg) {
+        Log.debug("Send photo with caption message: " + msg.caption());
         return telegramClient.sendPhoto(chatId, msg);
     }
 
     public Response send(MessageCollection.PollMsg msg) {
+        Log.debug("Send poll message: " + msg.question());
         return telegramClient.sendPoll(chatId, msg.question(), msg.isAnonymous(), msg.isMultiple(), msg.options());
     }
 
     public Response send(MessageCollection.QuizMsg msg) {
+        Log.debug("Send quiz message: " + msg.question());
         return telegramClient.sendQuiz(chatId, "quiz", msg.question(), msg.correctOption(), msg.isAnonymous(),
                 msg.isMultiple(), msg.options(), msg.explanation());
     }

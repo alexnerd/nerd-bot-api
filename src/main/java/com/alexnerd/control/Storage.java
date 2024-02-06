@@ -49,6 +49,7 @@ public class Storage {
     }
 
     public byte[] readImageFile(String path) {
+        Log.debug("Read image file: " + path);
         try {
             return Files.readAllBytes(storageImagePath.resolve(path));
         } catch (IOException e) {
@@ -58,6 +59,7 @@ public class Storage {
     }
 
     private String readJsonFile(Path path) {
+        Log.debug("Read json file: " + path);
         try {
             return Files.readString(path);
         } catch (IOException e) {
