@@ -37,7 +37,7 @@ public class JobScheduler {
     @Inject
     Storage storage;
 
-    @Scheduled(every = "{app.scheduler.timer.randommessage}")
+    @Scheduled(every = "${app.scheduler.timer.randommessage}")
     protected void sendRandomMessage() {
         String randomFile = storage.readRandomJsonFile();
         MessageCollection msg = mapper.load(randomFile);
