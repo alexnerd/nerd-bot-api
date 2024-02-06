@@ -31,10 +31,10 @@ import java.util.stream.Stream;
 @ApplicationScoped
 public class Storage {
 
-    @ConfigProperty(name = "storage.content.dir")
+    @ConfigProperty(name = "app.storage.content.dir")
     String contentDir;
 
-    @ConfigProperty(name = "storage.image.dir")
+    @ConfigProperty(name = "app.storage.image.dir")
     String imageDir;
 
     private Path storageContentPath;

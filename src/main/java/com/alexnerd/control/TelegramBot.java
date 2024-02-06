@@ -27,7 +27,7 @@ import jakarta.ws.rs.core.Response;
 @ApplicationScoped
 public class TelegramBot {
 
-    @ConfigProperty(name = "telegram.chatId")
+    @ConfigProperty(name = "app.telegram.chatId")
     String chatId;
 
     @Inject
