@@ -24,6 +24,7 @@ import io.quarkus.scheduler.Scheduled;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 @ApplicationScoped
 public class JobScheduler {
@@ -37,7 +38,7 @@ public class JobScheduler {
     @Inject
     Storage storage;
 
-    @Scheduled(every = "15s")
+    @Scheduled(every = "{app.scheduler.timer.randommessage}")
     protected void sendRandomMessage() {
         String randomFile = storage.readRandomJsonFile();
         MessageCollection msg = mapper.load(randomFile);
