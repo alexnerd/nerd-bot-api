@@ -17,26 +17,28 @@
 package com.alexnerd.control.factory.message;
 
 import com.alexnerd.control.Storage;
-import com.alexnerd.entity.MessageCollection;
+import com.alexnerd.entity.Message;
+import com.fasterxml.jackson.databind.JsonNode;
 
-import jakarta.json.JsonArray;
-import jakarta.json.JsonObject;
-import jakarta.json.JsonValue;
-import java.util.stream.Collectors;
+import java.util.Collection;
+import java.util.stream.StreamSupport;
 
 public class QuizMsgFactory extends MessageFactory{
     @Override
-    public MessageCollection create(JsonObject json, Storage storage) {
-        String question = json.getString("question");
-        int correctOption = json.getInt("correct_option_id");
-        boolean  isAnonymous = json.getBoolean("is_anonymous");
-        boolean  isMultiple = json.getBoolean("allows_multiple_answers");
-        String explanation = json.isNull("explanation") ? null : json.getString("explanation");
+    public Message create(JsonNode json, Storage storage) {
+        String type = json.get("type").asText();
+        String question = json.get("question").asText();
+        int correctOption = json.get("correct_option_id").asInt();
+        boolean  isAnonymous = json.get("is_anonymous").asBoolean();
+        boolean  isMultiple = json.get("allows_multiple_answers").asBoolean();
+        String explanation = json.get("explanation").isNull() ? null : json.get("explanation").asText();
 
-        JsonArray jsonArray = json.getJsonArray("options");
-        String options = jsonArray.stream().map(JsonValue::toString).collect(Collectors.joining(","));
+        Iterable<JsonNode> iterable = () -> json.get("options").iterator();
 
-        return new MessageCollection.QuizMsg(question, correctOption, isAnonymous, isMultiple,
-                "[" + options + "]", explanation);
+        Collection<String> options = StreamSupport.stream(iterable.spliterator(), false).
+                map(JsonNode::asText)
+                .toList();
+
+        return new Message.QuizMsg(type, question, correctOption, isAnonymous, isMultiple, options, explanation);
     }
 }

@@ -17,23 +17,26 @@
 package com.alexnerd.control.factory.message;
 
 import com.alexnerd.control.Storage;
-import com.alexnerd.entity.MessageCollection;
+import com.alexnerd.entity.Message;
 
-import jakarta.json.JsonArray;
-import jakarta.json.JsonObject;
-import jakarta.json.JsonValue;
-import java.util.stream.Collectors;
+import com.fasterxml.jackson.databind.JsonNode;
+
+import java.util.Collection;
+import java.util.stream.StreamSupport;
 
 public class PollMsgFactory extends MessageFactory{
     @Override
-    public MessageCollection create(JsonObject json, Storage storage) {
-        String question = json.getString("question");
-        boolean  isAnonymous = json.getBoolean("is_anonymous");
-        boolean  isMultiple = json.getBoolean("allows_multiple_answers");
+    public Message create(JsonNode json, Storage storage) {
+        String question = json.get("question").asText();
+        boolean isAnonymous = json.get("is_anonymous").asBoolean();
+        boolean isMultiple = json.get("allows_multiple_answers").asBoolean();
 
-        JsonArray jsonArray = json.getJsonArray("options");
-        String options = jsonArray.stream().map(JsonValue::toString).collect(Collectors.joining(","));
+        Iterable<JsonNode> iterable = () -> json.get("options").iterator();
 
-        return new MessageCollection.PollMsg(question, isAnonymous, isMultiple, "[" + options + "]");
+        Collection<String> options = StreamSupport.stream(iterable.spliterator(), false).
+                map(JsonNode::asText)
+                .toList();
+
+        return new Message.PollMsg(question, isAnonymous, isMultiple, options);
     }
 }

@@ -16,37 +16,31 @@
 
 package com.alexnerd.control.adapters;
 
-import com.alexnerd.entity.MessageCollection;
-import io.quarkus.logging.Log;
-import jakarta.annotation.PostConstruct;
 
+import com.alexnerd.control.Storage;
+import com.alexnerd.control.factory.message.MessageFactory;
+import com.alexnerd.control.factory.message.MessageFactoryProvider;
+import com.alexnerd.entity.Message;
+import com.alexnerd.entity.MessageType;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import jakarta.json.bind.Jsonb;
-import jakarta.json.bind.JsonbBuilder;
-import jakarta.json.bind.JsonbConfig;
 
 @ApplicationScoped
 public class MsgJsonMapper {
-
     @Inject
-    MsgJsonAdapter adapter;
+    Storage storage;
 
-    JsonbConfig config;
+    public Message convert(String json) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode jsonNode = mapper.readTree(json);
 
-    @PostConstruct
-    public void init() {
-        config = new JsonbConfig()
-                .withFormatting(true)
-                .withAdapters(adapter);
-    }
+        MessageType messageType = MessageType.valueOf(jsonNode.get("type").asText());
+        MessageFactory factory = MessageFactoryProvider.getFactory(messageType);
 
-    public MessageCollection load(String stringified) {
-        try (Jsonb jsonb = JsonbBuilder.create(config)) {
-            return jsonb.fromJson(stringified, MessageCollection.class);
-        } catch (Exception e) {
-            Log.error("Error converting json to MessageCollection, json: " + stringified, e);
-            throw new RuntimeException(e);
-        }
+        JsonNode message = jsonNode.get("message");
+        return factory.create(message, storage);
     }
 }

@@ -16,7 +16,7 @@
 
 package com.alexnerd.control;
 
-import com.alexnerd.entity.MessageCollection;
+import com.alexnerd.entity.Message;
 import io.quarkus.logging.Log;
 import io.quarkus.rest.client.reactive.ClientExceptionMapper;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
@@ -33,36 +33,20 @@ public interface TelegramRestClient {
 
     @GET
     @Path("/sendMessage")
-    @Consumes(MediaType.WILDCARD)
     Response sendMessage(@QueryParam("chat_id") String chatId,
                          @QueryParam("text") String message);
 
     @POST
     @Path("/sendPhoto")
-    @Consumes(MediaType.MULTIPART_FORM_DATA)
-    Response sendPhoto(@QueryParam("chat_id") String chatId, MessageCollection.PhotoWithCaptionMsg msg);
+    Response sendPhoto(@QueryParam("chat_id") String chatId, Message.PhotoWithCaptionMsg msg);
 
     @GET
     @Path("/sendPoll")
-    @Consumes(MediaType.MULTIPART_FORM_DATA)
-    Response sendPoll(@QueryParam("chat_id") String chatId,
-                      @QueryParam("question") String question,
-                      @QueryParam("is_anonymous") boolean isAnonymous,
-                      @QueryParam("allows_multiple_answers") boolean isMultiple,
-                      @QueryParam("options") String options);
+    Response sendPoll(@QueryParam("chat_id") String chatId, Message.PollMsg pollMsg);
 
     @POST
     @Path("/sendPoll")
-    @Consumes(MediaType.MULTIPART_FORM_DATA)
-    Response sendQuiz(@QueryParam("chat_id") String chatId,
-                      @QueryParam("type") String type,
-                      @QueryParam("question") String question,
-                      @QueryParam("correct_option_id") int correctOption,
-                      @QueryParam("is_anonymous") boolean isAnonymous,
-                      @QueryParam("allows_multiple_answers") boolean isMultiple,
-                      @QueryParam("options") String options,
-                      @QueryParam("explanation") String explanation);
-
+    Response sendQuiz(@QueryParam("chat_id") String chatId, Message.QuizMsg quizMsg);
 
     @ClientExceptionMapper
     static RuntimeException toException(Response response) {

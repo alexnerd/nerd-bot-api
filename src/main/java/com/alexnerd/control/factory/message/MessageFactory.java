@@ -17,10 +17,10 @@
 package com.alexnerd.control.factory.message;
 
 import com.alexnerd.control.Storage;
-import com.alexnerd.entity.MessageCollection;
+import com.alexnerd.entity.Message;
 
-import jakarta.json.JsonObject;
+import com.fasterxml.jackson.databind.JsonNode;
 
 public abstract class MessageFactory {
-    public abstract MessageCollection create(JsonObject json, Storage storage);
+    public abstract Message create(JsonNode json, Storage storage);
 }

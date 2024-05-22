@@ -16,8 +16,8 @@
 
 package com.alexnerd.entity;
 
-import com.alexnerd.control.TelegramBot;
+import com.alexnerd.control.TelegramFacade;
 
 public interface Executable {
-    void execute(TelegramBot bot);
+    void execute(TelegramFacade facade);
 }

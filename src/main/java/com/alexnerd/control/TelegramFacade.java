@@ -16,7 +16,7 @@
 
 package com.alexnerd.control;
 
-import com.alexnerd.entity.MessageCollection;
+import com.alexnerd.entity.Message;
 import io.quarkus.logging.Log;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
@@ -26,7 +26,7 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.core.Response;
 
 @ApplicationScoped
-public class TelegramBot {
+public class TelegramFacade {
 
     @ConfigProperty(name = "app.telegram.chatId")
     String chatId;
@@ -35,24 +35,23 @@ public class TelegramBot {
     @RestClient
     TelegramRestClient telegramClient;
 
-    public Response send(MessageCollection.TextMsg msg) {
+    public Response send(Message.TextMsg msg) {
         Log.debug("Send text message: " + msg.message());
         return telegramClient.sendMessage(chatId, msg.message());
     }
 
-    public Response send(MessageCollection.PhotoWithCaptionMsg msg) {
+    public Response send(Message.PhotoWithCaptionMsg msg) {
         Log.debug("Send photo with caption message: " + msg.caption());
         return telegramClient.sendPhoto(chatId, msg);
     }
 
-    public Response send(MessageCollection.PollMsg msg) {
+    public Response send(Message.PollMsg msg) {
         Log.debug("Send poll message: " + msg.question());
-        return telegramClient.sendPoll(chatId, msg.question(), msg.isAnonymous(), msg.isMultiple(), msg.options());
+        return telegramClient.sendPoll(chatId, msg);
     }
 
-    public Response send(MessageCollection.QuizMsg msg) {
+    public Response send(Message.QuizMsg msg) {
         Log.debug("Send quiz message: " + msg.question());
-        return telegramClient.sendQuiz(chatId, "quiz", msg.question(), msg.correctOption(), msg.isAnonymous(),
-                msg.isMultiple(), msg.options(), msg.explanation());
+        return telegramClient.sendQuiz(chatId, msg);
     }
 }

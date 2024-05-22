@@ -17,9 +17,10 @@
 package com.alexnerd.boundary;
 
 import com.alexnerd.control.Storage;
-import com.alexnerd.control.TelegramBot;
+import com.alexnerd.control.TelegramFacade;
 import com.alexnerd.control.adapters.MsgJsonMapper;
-import com.alexnerd.entity.MessageCollection;
+import com.alexnerd.entity.Message;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import io.quarkus.scheduler.Scheduled;
 
 import jakarta.enterprise.context.ApplicationScoped;
@@ -32,15 +33,19 @@ public class JobScheduler {
     MsgJsonMapper mapper;
 
     @Inject
-    TelegramBot bot;
+    TelegramFacade facade;
 
     @Inject
     Storage storage;
 
     @Scheduled(every = "${app.scheduler.timer.randommessage}")
     protected void sendRandomMessage() {
-        String randomFile = storage.readRandomJsonFile();
-        MessageCollection msg = mapper.load(randomFile);
-        msg.execute(bot);
+        String json = storage.readRandomJsonFile();
+        try {
+            Message msg = mapper.convert(json);
+            msg.execute(facade);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

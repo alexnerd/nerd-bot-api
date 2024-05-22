@@ -17,17 +17,17 @@
 package com.alexnerd.control.factory.message;
 
 import com.alexnerd.control.Storage;
-import com.alexnerd.entity.MessageCollection;
+import com.alexnerd.entity.Message;
 
-import jakarta.json.JsonObject;
+import com.fasterxml.jackson.databind.JsonNode;
 
 public class PhotoWithCaptionMsgFactory extends MessageFactory{
 
     @Override
-    public MessageCollection create(JsonObject json, Storage storage) {
-        String text = json.getString("text");
-        String imgSource = json.getString("img_source");
+    public Message create(JsonNode json, Storage storage) {
+        String text = json.get("text").asText();
+        String imgSource = json.get("img_source").asText();
         byte[] photo = storage.readImageFile(imgSource);
-        return new MessageCollection.PhotoWithCaptionMsg(photo, text);
+        return new Message.PhotoWithCaptionMsg(photo, text);
     }
 }
